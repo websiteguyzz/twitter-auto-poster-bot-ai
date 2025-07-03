@@ -34,7 +34,7 @@ async function run() {
   sendTweet(text);
 }
 
-run();
+//run();
 
 async function sendTweet(tweetText) {
   try {
@@ -44,3 +44,4 @@ async function sendTweet(tweetText) {
     console.error("Error sending tweet:", error);
   }
 }
+sendTweet("How are you X family.");
