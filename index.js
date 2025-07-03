@@ -1,3 +1,48 @@
+const { TwitterApi } = require("twitter-api-v2");
+const SECRETS = require("./SECRETS");
+
+// Authenticate with Twitter API
+const twitterClient = new TwitterApi({
+  appKey: SECRETS.APP_KEY,
+  appSecret: SECRETS.APP_SECRET,
+  accessToken: SECRETS.ACCESS_TOKEN,
+  accessSecret: SECRETS.ACCESS_SECRET,
+});
+
+// Main function
+async function replyToFirstTweet() {
+  try {
+    // Get your own tweets (latest 5 just in case)
+    const user = await twitterClient.v2.me();
+    const userId = user.data.id;
+
+    const tweets = await twitterClient.v2.userTimeline(userId, {
+      max_results: 5,
+      "tweet.fields": "id,text",
+    });
+
+    const firstTweet = tweets.data?.data?.[0]; // First tweet in the timeline
+
+    if (!firstTweet) {
+      console.log("No tweets found on your timeline.");
+      return;
+    }
+
+    const tweetId = firstTweet.id;
+    const comment = "🔥 That's a banger! Had to comment! #devlife";
+
+    // Reply to the tweet
+    await twitterClient.v2.reply(comment, tweetId);
+    console.log(`Replied to tweet ID ${tweetId} successfully.`);
+  } catch (error) {
+    console.error("Something went wrong:", error);
+  }
+}
+
+replyToFirstTweet();
+
+
+/*
 // By VishwaGauravIn (https://itsvg.in)
 
 const GenAI = require("@google/generative-ai");
@@ -45,3 +90,5 @@ async function sendTweet(tweetText) {
   }
 }
 sendTweet("How are you X family.");
+
+*/
