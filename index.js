@@ -1,6 +1,46 @@
 const { TwitterApi } = require("twitter-api-v2");
 const SECRETS = require("./SECRETS");
 
+const twitterClient = new TwitterApi({
+  appKey: SECRETS.APP_KEY,
+  appSecret: SECRETS.APP_SECRET,
+  accessToken: SECRETS.ACCESS_TOKEN,
+  accessSecret: SECRETS.ACCESS_SECRET,
+});
+
+async function replyToFirstFeedTweet() {
+  try {
+    // Get the home timeline (your feed), default max 20 tweets
+    const feedTweets = await twitterClient.v2.homeTimeline({
+      max_results: 5,          // fetch 5 tweets to be safe
+      "tweet.fields": "id,text,author_id",
+    });
+
+    const firstTweet = feedTweets.data?.data?.[0];
+
+    if (!firstTweet) {
+      console.log("No tweets found in your feed.");
+      return;
+    }
+
+    const tweetId = firstTweet.id;
+    const comment = "🔥 Nice post! Just dropping some love from the big guyyz.";
+
+    // Reply to the tweet
+    await twitterClient.v2.reply(comment, tweetId);
+    console.log(`Replied to feed tweet ID ${tweetId} successfully.`);
+  } catch (error) {
+    console.error("Error replying to feed tweet:", error);
+  }
+}
+
+replyToFirstFeedTweet();
+
+
+/*
+const { TwitterApi } = require("twitter-api-v2");
+const SECRETS = require("./SECRETS");
+
 // Authenticate with Twitter API
 const twitterClient = new TwitterApi({
   appKey: SECRETS.APP_KEY,
@@ -41,7 +81,7 @@ async function replyToFirstTweet() {
 
 replyToFirstTweet();
 
-
+*/
 /*
 // By VishwaGauravIn (https://itsvg.in)
 
