@@ -16,7 +16,7 @@ async function replyToFirstFeedTweet() {
       "tweet.fields": "id,text,author_id",
     });
 
-    const firstTweet = feedTweets.data?.data?.[0];
+    const firstTweet = feedTweets.data?.data?.[2];
 
     if (!firstTweet) {
       console.log("No tweets found in your feed.");
